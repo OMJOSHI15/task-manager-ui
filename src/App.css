@@ -13,17 +13,6 @@
   letter-spacing: -0.02em;
 }
 
-.app__subtitle {
-  color: var(--text-dim);
-  font-size: 14px;
-  margin-top: 6px;
-}
-
-.app__subtitle code {
-  color: var(--accent);
-  border-color: var(--accent-dim);
-}
-
 /* ---- buttons ---- */
 
 .btn {

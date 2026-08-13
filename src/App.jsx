@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getTasks, createTask, updateTask, deleteTask, BASE_URL } from './api';
+import { getTasks, createTask, updateTask, deleteTask } from './api';
 import { useToast } from './context/ToastContext';
 import Spinner from './components/Spinner';
 import ErrorMessage from './components/ErrorMessage';
@@ -92,9 +92,6 @@ function App() {
     <div className="app">
       <header className="app__header">
         <h1>Task Manager</h1>
-        <p className="app__subtitle">
-          Practical 6 — React talking to <code>task-manager-api</code> at <code>{BASE_URL}</code>
-        </p>
       </header>
 
       <main className="app__main">
