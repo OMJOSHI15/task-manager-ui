@@ -6,11 +6,57 @@
 
 .app__header {
   margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .app__header h1 {
   font-size: 32px;
   letter-spacing: -0.02em;
+}
+
+/* ---- auth (Practical 7) ---- */
+
+.app--auth {
+  display: flex;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.app--auth .app__main {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.task-form h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.app--auth .task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app--auth .task-form__row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.app--auth .task-form__row label {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.app--auth .task-form .btn {
+  width: 100%;
+  margin-top: 6px;
 }
 
 /* ---- buttons ---- */

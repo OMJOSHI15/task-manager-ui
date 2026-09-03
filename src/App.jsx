@@ -1,20 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getTasks, createTask, updateTask, deleteTask } from './api';
 import { useToast } from './context/ToastContext';
+import { useAuth } from './context/AuthContext';
 import Spinner from './components/Spinner';
 import ErrorMessage from './components/ErrorMessage';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import ConfirmDialog from './components/ConfirmDialog';
+import AuthForm from './components/AuthForm';
 import './App.css';
 
-function App() {
+// Practical 7: everything below was the whole app before auth existed.
+// It's now only rendered once a token is present — see the `App` export
+// at the bottom, which gates it behind AuthForm.
+function TaskDashboard() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const showToast = useToast();
+  const { logout } = useAuth();
 
   // Step 7 of the practical: initial fetch on mount, populating state
   // from the database rather than hardcoded values.
@@ -25,11 +31,17 @@ function App() {
       const data = await getTasks();
       setTasks(data);
     } catch (err) {
+      // Practical 7: an expired/invalid token surfaces here as a 401 —
+      // bounce back to the login form instead of showing a raw error.
+      if (err.isAuthError) {
+        logout();
+        return;
+      }
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [logout]);
 
   useEffect(() => {
     loadTasks();
@@ -92,6 +104,9 @@ function App() {
     <div className="app">
       <header className="app__header">
         <h1>Task Manager</h1>
+        <button type="button" className="btn btn--ghost btn--sm" onClick={logout}>
+          Log out
+        </button>
       </header>
 
       <main className="app__main">
@@ -120,6 +135,22 @@ function App() {
       />
     </div>
   );
+}
+
+// Practical 7: no router in this app (confirmed absent from package.json),
+// so the login gate is just a conditional render rather than a new route.
+function App() {
+  const { isAuthed } = useAuth();
+  if (!isAuthed) {
+    return (
+      <div className="app app--auth">
+        <main className="app__main">
+          <AuthForm />
+        </main>
+      </div>
+    );
+  }
+  return <TaskDashboard />;
 }
 
 export default App;
