@@ -33,62 +33,87 @@ export default function AuthForm() {
     }
   }
 
-  return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <h2>{mode === 'login' ? 'Log in' : 'Create an account'}</h2>
+  function switchMode(next) {
+    if (next === mode) return;
+    setMode(next);
+    setError(null);
+  }
 
-      {mode === 'register' && (
+  return (
+    <div className="auth-card">
+      <div className="auth-badge" aria-hidden="true">
+        ✓
+      </div>
+      <h1 className="auth-card__title">Task Manager</h1>
+      <p className="auth-card__subtitle">Sign in to view and manage your tasks.</p>
+
+      <div className="auth-tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === 'login'}
+          className={`auth-tabs__tab ${mode === 'login' ? 'auth-tabs__tab--active' : ''}`}
+          onClick={() => switchMode('login')}
+        >
+          Log in
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === 'register'}
+          className={`auth-tabs__tab ${mode === 'register' ? 'auth-tabs__tab--active' : ''}`}
+          onClick={() => switchMode('register')}
+        >
+          Register
+        </button>
+      </div>
+
+      <form className="task-form" onSubmit={handleSubmit}>
+        {mode === 'register' && (
+          <div className="task-form__row">
+            <label htmlFor="auth-name">Name</label>
+            <input
+              id="auth-name"
+              type="text"
+              placeholder="Ada Lovelace"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+        )}
+
         <div className="task-form__row">
-          <label htmlFor="auth-name">Name</label>
+          <label htmlFor="auth-email">Email</label>
           <input
-            id="auth-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="auth-email"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
-      )}
 
-      <div className="task-form__row">
-        <label htmlFor="auth-email">Email</label>
-        <input
-          id="auth-email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
+        <div className="task-form__row">
+          <label htmlFor="auth-password">Password</label>
+          <input
+            id="auth-password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength={6}
+            required
+          />
+        </div>
 
-      <div className="task-form__row">
-        <label htmlFor="auth-password">Password</label>
-        <input
-          id="auth-password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          minLength={6}
-          required
-        />
-      </div>
+        {error && <p className="task-form__error">⚠ {error}</p>}
 
-      {error && <p className="task-form__error">{error}</p>}
-
-      <button type="submit" className="btn btn--primary" disabled={submitting}>
-        {submitting ? 'Please wait…' : mode === 'login' ? 'Log in' : 'Register'}
-      </button>
-
-      <button
-        type="button"
-        className="btn btn--ghost"
-        onClick={() => {
-          setMode(mode === 'login' ? 'register' : 'login');
-          setError(null);
-        }}
-      >
-        {mode === 'login' ? 'Need an account? Register' : 'Already have an account? Log in'}
-      </button>
-    </form>
+        <button type="submit" className="btn btn--primary" disabled={submitting}>
+          {submitting ? 'Please wait…' : mode === 'login' ? 'Log in' : 'Create account'}
+        </button>
+      </form>
+    </div>
   );
 }
